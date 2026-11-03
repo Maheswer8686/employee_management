@@ -1,0 +1,58 @@
+{% extends 'employees/base.html' %}
+{% block content %}
+<div class="main">
+    <div class="breadcrumb">
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+        <span>›</span> Employee Profile
+    </div>
+
+    <div class="card">
+        <div class="profile-card">
+            <div class="profile-image-wrap">
+                {% if employee.profile_image %}
+                <img src="{{ employee.profile_image.url }}" alt="{{ employee.name }}" style="width:120px;height:120px;border-radius:12px;object-fit:cover;border:3px solid var(--border);">
+                {% else %}
+                <div class="profile-image-placeholder">{{ employee.name|first|upper }}</div>
+                {% endif %}
+            </div>
+
+            <div class="profile-info" style="flex:1;">
+                <h2>{{ employee.name }}</h2>
+                <span class="dept-badge" style="margin-bottom:0.75rem; display:inline-block;">{{ employee.department }}</span>
+
+                <div class="profile-detail">
+                    <div class="detail-item">
+                        <label>Age</label>
+                        <span>{{ employee.age }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Email</label>
+                        <span>{{ employee.email }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Phone</label>
+                        <span>{{ employee.phone }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Department</label>
+                        <span>{{ employee.department }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Salary</label>
+                        <span>${{ employee.salary|floatformat:0 }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Address</label>
+                        <span>{{ employee.address }}</span>
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:0.75rem; margin-top:1.5rem;">
+                    <a href="{% url 'edit_employee' employee.pk %}" class="btn btn-warning">Edit</a>
+                    <a href="{% url 'dashboard' %}" class="btn btn-secondary">Back to List</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

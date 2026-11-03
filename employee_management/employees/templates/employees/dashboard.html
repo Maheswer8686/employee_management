@@ -1,0 +1,74 @@
+{% extends 'employees/base.html' %}
+{% block content %}
+<div class="main">
+    <div class="card">
+        <div class="page-header">
+            <h1 class="page-title">Employee List</h1>
+            <div style="display:flex; gap:0.75rem; align-items:center; flex-wrap:wrap;">
+                <form method="get" style="display:flex;">
+                    <div class="search-bar">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:#718096;flex-shrink:0;">
+                            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+                        </svg>
+                        <input type="text" name="search" placeholder="Search employees..." value="{{ query }}">
+                    </div>
+                </form>
+                <a href="{% url 'add_employee' %}" class="btn btn-success">
+                    + Add Employee
+                </a>
+            </div>
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Photo</th>
+                        <th>Name</th>
+                        <th>Department</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Salary</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for emp in employees %}
+                    <tr>
+                        <td style="color:var(--text-muted); font-weight:500;">{{ forloop.counter }}</td>
+                        <td>
+                            {% if emp.profile_image %}
+                            <img src="{{ emp.profile_image.url }}" class="employee-avatar" alt="{{ emp.name }}">
+                            {% else %}
+                            <div class="avatar-placeholder">{{ emp.name|first|upper }}</div>
+                            {% endif %}
+                        </td>
+                        <td style="font-weight:600;">{{ emp.name }}</td>
+                        <td>
+                            <span class="dept-badge">{{ emp.department }}</span>
+                        </td>
+                        <td style="color:var(--text-muted);">{{ emp.email }}</td>
+                        <td style="color:var(--text-muted);">{{ emp.phone }}</td>
+                        <td style="font-weight:600;">${{ emp.salary|floatformat:0 }}</td>
+                        <td>
+                            <div style="display:flex; gap:0.4rem;">
+                                <a href="{% url 'employee_profile' emp.pk %}" class="btn btn-primary btn-sm">View</a>
+                                <a href="{% url 'edit_employee' emp.pk %}" class="btn btn-warning btn-sm">Edit</a>
+                                <a href="{% url 'delete_employee' emp.pk %}" class="btn btn-danger btn-sm">Delete</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8" style="text-align:center; padding:3rem; color:var(--text-muted);">
+                            No employees found. <a href="{% url 'add_employee' %}" style="color:var(--accent);">Add one now</a>.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
